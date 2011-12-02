@@ -114,19 +114,6 @@ public class ClientThread extends Thread {
 					if (!httpreq.startsWith("/")) httpreq = "/"+httpreq;
 				} else if (http && (line.equalsIgnoreCase("/"))) {
 					scode = 200;
-					if (httpkind == '@') {
-						out.println("HTTP/1.1 200 OK");
-						out.println("Content-Type: image/png");
-						out.println("");
-						HTTPIcons hi = new HTTPIcons();
-						try {
-							out.print(hi.icons.get(httpreq.replaceFirst("\\.png","")));
-						} catch (Throwable e) {
-							out.print(hi.icons.get("generic"));
-						}
-						out.flush();
-						break;
-					}
 					ArrayList<GopherEntry> al = MakeEntries(httpreq);
 					boolean haserror = false;
 					for (GopherEntry ge : al) {
@@ -143,13 +130,7 @@ public class ClientThread extends Thread {
 							if (ge.kind == 'i') {
 								out.println("<tr><td>&nbsp;</td><td><pre>"+ge.title+"</pre></td></tr>");
 							} else {
-								String icon;
-								if ((ge.kind == 'h') && ge.destination.startsWith("URL:")) {
-									icon = "hurl";
-								} else {
-									icon = ""+ge.kind;
-								}
-								out.println("<tr><td><img src=\"/@/"+icon+".png\"></td><td><pre><a href=\""+((ge.host == Main.props.getPropertyString("name","127.0.0.1")) ? "http" : "gopher")+"://"+ge.host+":"+ge.port+"/"+ge.kind+"/"+ge.destination+"\">"+ge.title+"</a></pre></td></tr>");
+								out.println("<tr><td><pre>"+Util.GetFullKind((ge.destination.startsWith("URL:")) ? 'U' : ge.kind)+"</pre></td><td><pre><a href=\""+((ge.host == Main.props.getPropertyString("name","127.0.0.1")) ? "http" : "gopher")+"://"+ge.host+":"+ge.port+"/"+ge.kind+"/"+ge.destination+"\">"+ge.title+"</a></pre></td></tr>");
 							}
 						}
 						out.println("</tbody></table>");
