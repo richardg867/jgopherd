@@ -129,8 +129,10 @@ public class ClientThread extends Thread {
 						for (GopherEntry ge : al) {
 							if (ge.kind == 'i') {
 								out.println("<tr><td>&nbsp;</td><td><pre>"+ge.title+"</pre></td></tr>");
+							} else if (ge.kind == '3') {
+								out.println("<tr><td>&nbsp;</td><td><pre><font color=\"red\"><b>"+ge.title+"</b></font></pre></td></tr>");
 							} else {
-								out.println("<tr><td><pre>"+Util.GetFullKind((ge.destination.startsWith("URL:")) ? 'U' : ge.kind)+"</pre></td><td><pre><a href=\""+((ge.host == Main.props.getPropertyString("name","127.0.0.1")) ? "http" : "gopher")+"://"+ge.host+":"+ge.port+"/"+ge.kind+"/"+ge.destination+"\">"+ge.title+"</a></pre></td></tr>");
+								out.println("<tr><td><pre>"+Util.GetFullKind((ge.destination.startsWith("URL:")) ? 'U' : ge.kind)+"</pre></td><td><pre><a href=\""+((ge.host == Main.props.getPropertyString("name","127.0.0.1")) ? "http" : "gopher")+"://"+ge.host+":"+ge.port+"/"+ge.kind+ge.destination+"\">"+ge.title+"</a></pre></td></tr>");
 							}
 						}
 						out.println("</tbody></table>");
@@ -289,7 +291,6 @@ public class ClientThread extends Thread {
 		try {
 			fis = new FileInputStream(Main.props.getPropertyString("root","gopherdocs")+line+"/gophermap");
 		} catch (Throwable e) {
-			System.out.println(e);
 			ArrayList<GopherEntry> al = new ArrayList<GopherEntry>();
 			al.add(new GopherEntry('i',"Directory listing for "+line));
 			al.add(new GopherEntry('i',""));

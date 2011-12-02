@@ -24,7 +24,7 @@ public class BuckGophermap extends Gophermap {
 			if ((line == "") || (line == null)) {
 				break;
 			} else {
-				split = line.split(""+'\t');
+				split = line.split("\t");
 			}
 			char kind;
 			String title;
@@ -63,7 +63,7 @@ public class BuckGophermap extends Gophermap {
 				host = Main.props.getPropertyString("name","127.0.0.1");
 			}
 			try {
-				port = Integer.parseInt(split[2]);
+				port = Integer.parseInt(split[3]);
 			} catch (Throwable e) {
 				port = Main.props.getPropertyInt("port",70);
 			}
