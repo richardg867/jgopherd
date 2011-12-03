@@ -14,6 +14,13 @@ public class GopherEntry {
 		this.port = port;
 		this.destination = destination;
 	}
+	public GopherEntry(char kind) {
+		this.kind = kind;
+		this.title = "";
+		this.host = Main.props.getPropertyString("name","127.0.0.1");
+		this.port = Main.props.getPropertyInt("port",70);
+		this.destination = "/";
+	}
 	public GopherEntry(char kind, String title) {
 		this.kind = kind;
 		this.title = title;
