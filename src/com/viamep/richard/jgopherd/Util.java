@@ -101,5 +101,14 @@ public class Util {
 		return "[GEN]";
 	}
 	
-	
+	public static String GetEnv(String name, String def) {
+		try {
+			String env = System.getenv(name);
+			if ((env == "") || (env == null)) return def;
+			return env;
+		} catch (Throwable e) {
+			// do nothing
+		}
+		return def;
+	}
 }
