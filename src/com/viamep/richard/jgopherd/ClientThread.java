@@ -267,22 +267,7 @@ public class ClientThread extends Thread {
 				scode = 500;
 				return MakeError("Error while trying to execute mole",e);
 			}
-			BufferedReader pos = new BufferedReader(new InputStreamReader(prc.getInputStream()));
-			String ln;
-			while (true) {
-				try {
-					ln = pos.readLine();
-				} catch (Throwable e) {
-					continue;
-				}
-				out.println(ln);
-				try {
-					prc.exitValue();
-					break;
-				} catch (Throwable e) {
-					continue;
-				}
-			}
+			al.addAll(new BuckGophermap().parse(line,prc.getInputStream()));
 		} else {
 			scode = 404;
 			if (line.equalsIgnoreCase("/")) {
