@@ -124,7 +124,7 @@ public class ClientThread extends Thread {
 						out.println("Content-Type: text/html");
 						out.println("");
 						out.println("<html><head><title>Gopher: "+Util.HTMLEscape(httpreq)+"</title></head><body>");
-						out.println("<h2>Gopher: "+Util.HTMLEscape(httpreq)+"</h2><hr>");
+						out.println("<h2><a href=\"/1\">[/]</a> Gopher: "+Util.HTMLEscape(httpreq)+"</h2><hr>");
 						out.println("<table border=\"0\"><tbody>");
 						for (GopherEntry ge : al) {
 							if (ge.kind == 'i') {
@@ -298,7 +298,7 @@ public class ClientThread extends Thread {
 			for (String fn : new File(Main.props.getPropertyString("root","gopherdocs")+line).list()) {
 				if (!fn.equalsIgnoreCase("gophermap")&&!fn.equalsIgnoreCase("gophertag")) {
 					f1 = new File(fn);
-					al.add(new GopherEntry(Util.GetType(f1.getAbsolutePath()),f1.getName(),line+"/"+f1.getName()));
+					al.add(new GopherEntry(Util.GetType(Main.props.getPropertyString("root","gopherdocs")+line+"/"+f1.getName()),f1.getName(),(line.endsWith("/") ? line.substring(0,line.length()-1) : line)+"/"+f1.getName()));
 				}
 			}
 			al.add(new GopherEntry('i',""));

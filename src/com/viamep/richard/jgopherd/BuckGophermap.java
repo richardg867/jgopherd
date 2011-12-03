@@ -65,7 +65,7 @@ public class BuckGophermap extends Gophermap {
 			try {
 				port = Integer.parseInt(split[3]);
 			} catch (Throwable e) {
-				port = Main.props.getPropertyInt("port",70);
+				port = (host == Main.props.getPropertyString("name","127.0.0.1")) ? Main.props.getPropertyInt("port",70) : 70;
 			}
 			al.add(new GopherEntry(kind, title, host, port, destination));
 		}
