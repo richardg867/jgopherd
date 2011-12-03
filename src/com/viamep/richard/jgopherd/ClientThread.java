@@ -92,7 +92,6 @@ public class ClientThread extends Thread {
 					MakeError("I do not do Gopher+!",sa);
 					break;
 				}
-				File f = new File(Main.props.getPropertyString("root","gopherdocs")+line);
 				if (line.startsWith("/GET ") || line.startsWith("/POST ")) {
 					log = false;
 					http = true;
@@ -162,49 +161,6 @@ public class ClientThread extends Thread {
 					break;
 				} else if (http) {
 					continue;
-				} else if (f.getName().endsWith(".class") && f.exists() && !nomole) {
-					scode = 500;
-					URL url;
-					try {
-						url = new URL("file://"+f.getParent());
-					} catch (Throwable e) {
-						MakeError("Error while loading j-mole: Invalid file",e);
-						break;
-					}
-					URL[] urla = {url};
-					URLClassLoader ucl = new URLClassLoader(urla);
-					Class<? extends JMole> cls;
-					try {
-						cls = (Class<? extends JMole>)ucl.loadClass(f.getName().substring(0,f.getName().length()-6)).asSubclass(JMole.class);
-					} catch (Throwable e) {
-						MakeError("Error while loading j-mole: Invalid class",e);
-						break;
-					}
-					HashMap<String,String> envmap = new HashMap<String,String>();
-					envmap.put("REMOTE_HOST",addr.getHostString());
-					envmap.put("REMOTE_ADDR",addr.getHostName());
-					envmap.put("REMOTE_PORT",""+addr.getPort());
-					envmap.put("SERVER_HOST",Main.props.getPropertyString("name","127.0.0.1"));
-					envmap.put("SERVER_PORT",""+Main.props.getPropertyInt("port",70));
-					envmap.put("SELECTOR",fline);
-					envmap.put("REQUEST",line);
-					ArrayList<GopherEntry> entries;
-					try {
-						entries = cls.newInstance().run(envmap);
-					} catch (Throwable e) {
-						MakeError("Error while executing j-mole",e);
-						break;
-					}
-					scode = 200;
-					for (GopherEntry ge : entries) {
-						out.println(ge.GetAsRaw());
-					}
-				} else {
-					scode = 200;
-					for (GopherEntry ge : MakeEntries(line,params,nomole)) {
-						if (ge.kind == '3') scode = 404;
-						out.println(ge.GetAsRaw());
-					}
 				}
 			}
 		if (log) Main.log.finest(source+" "+scode+" "+line);
@@ -282,6 +238,38 @@ public class ClientThread extends Thread {
 				return MakeError("Error while trying to execute mole",e);
 			}
 			al.addAll(new BuckGophermap().parse(line,prc.getInputStream()));
+		} else if (f.getName().endsWith(".class") && f.exists() && !nomole) {
+			scode = 500;
+			URL url;
+			try {
+				url = new URL("file://"+f.getParent());
+			} catch (Throwable e) {
+				return MakeError("Error while loading j-mole: Invalid file",e);
+			}
+			URL[] urla = {url};
+			URLClassLoader ucl = new URLClassLoader(urla);
+			Class<? extends JMole> cls;
+			try {
+				cls = (Class<? extends JMole>)ucl.loadClass(f.getName().substring(0,f.getName().length()-6)).asSubclass(JMole.class);
+			} catch (Throwable e) {
+				return MakeError("Error while loading j-mole: Invalid class",e);
+			}
+			HashMap<String,String> envmap = new HashMap<String,String>();
+			envmap.put("REMOTE_HOST",addr.getHostString());
+			envmap.put("REMOTE_ADDR",addr.getHostName());
+			envmap.put("REMOTE_PORT",""+addr.getPort());
+			envmap.put("SERVER_HOST",Main.props.getPropertyString("name","127.0.0.1"));
+			envmap.put("SERVER_PORT",""+Main.props.getPropertyInt("port",70));
+			envmap.put("SELECTOR",fline);
+			envmap.put("REQUEST",line);
+			ArrayList<GopherEntry> entries;
+			try {
+				entries = cls.newInstance().run(envmap);
+			} catch (Throwable e) {
+				return MakeError("Error while executing j-mole",e);
+			}
+			scode = 200;
+			al.addAll(entries);
 		} else {
 			scode = 404;
 			if (line.equalsIgnoreCase("/")) {
