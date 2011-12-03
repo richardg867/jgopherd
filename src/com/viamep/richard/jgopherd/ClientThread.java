@@ -112,6 +112,7 @@ public class ClientThread extends Thread {
 					httpkind = '1';
 				}
 			} else if (http && (line.equalsIgnoreCase("/"))) {
+				log = true;
 				scode = 200;
 				ArrayList<GopherEntry> al = MakeEntries(httppath,httpparams,nomole);
 				boolean haserror = false;
@@ -155,6 +156,13 @@ public class ClientThread extends Thread {
 				break;
 			} else if (http) {
 				continue;
+			} else {
+				scode = 200;
+				for (GopherEntry ge : MakeEntries(line,params,nomole)) {
+					if (ge.kind == '3') scode = 404;
+					out.println(ge.GetAsRaw());
+				}
+				break;
 			}
 		}
 		if (log) Main.log.finest((http ? "H" : "G")+" "+source+" "+scode+" "+line);
