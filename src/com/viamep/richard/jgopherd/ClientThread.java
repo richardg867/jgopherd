@@ -26,6 +26,7 @@ public class ClientThread extends Thread {
 	private String line;
 	private String params;
 	private String fline;
+	private boolean nodot = false;
 	
 	public ClientThread(Socket sock) {
 		socket = sock;
@@ -194,7 +195,7 @@ public class ClientThread extends Thread {
 			}
 		}
 		if (log) Main.log.finest((http ? "H" : "G")+" "+source+" "+scode+" "+line);
-		if (!http) out.println(".");
+		if (!http && !nodot) out.println(".");
 		try {
 			socket.close();
 		} catch (IOException e) {
@@ -230,7 +231,23 @@ public class ClientThread extends Thread {
 		if (addr == null) addr = new InetSocketAddress(proxyip,proxyport);
 		ArrayList<GopherEntry> al = new ArrayList<GopherEntry>();
 		File f = new File(Main.props.getPropertyString("root","gopherdocs")+line);
-		if (f.isDirectory()) {
+		if (line.equalsIgnoreCase("/caps.txt")) {
+			nodot = true;
+			out.println("CAPS");
+			out.println("CapsVersion=1");
+			out.println("ExpireCapsAfter=21600");
+			out.println("PathDelimiter=/");
+			out.println("PathIdentity=.");
+			out.println("PathParent=..");
+			out.println("PathParentDouble=FALSE");
+			out.println("PathEscapeCharacter=\\");
+			out.println("PathKeepPreDelimiter=FALSE");
+			out.println("ServerSoftware=jgopherd");
+			out.println("ServerSoftwareVersion="+Main.version);
+			out.println("ServerArchitecture="+System.getProperty("os.arch"));
+			out.println("ServerDescription="+System.getProperty("os.name")+" running JVM "+System.getProperty("java.vendor")+" version "+System.getProperty("java.version")+" ("+System.getProperty("java.vendor.url")+")");
+			out.println("ServerGeolocationString=");
+		} else if (f.isDirectory()) {
 			FileInputStream fis;
 			try {
 				fis = new FileInputStream(Main.props.getPropertyString("root","gopherdocs")+line+"/gophermap");
