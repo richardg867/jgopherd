@@ -1,11 +1,12 @@
 package com.viamep.richard.jgopherd;
 
 public class GopherEntry {
-	public char kind;
-	public String title;
-	public String host;
-	public int port;
-	public String destination;
+	public boolean raw = false;
+	public char kind = '@';
+	public String title = "";
+	public String host = "";
+	public int port = 65535;
+	public String destination = "";
 	
 	public GopherEntry(char kind, String title, String host, int port, String destination) {
 		this.kind = kind;
@@ -42,8 +43,13 @@ public class GopherEntry {
 		this.port = Main.props.getPropertyInt("port",70);
 		this.destination = destination;
 	}
+	public GopherEntry(String text) {
+		this.raw = true;
+		this.title = text;
+	}
 	
 	public String GetAsRaw() {
-		return kind+title+'\t'+destination+'\t'+host+'\t'+port;
+		if (raw) return title; 
+		else return kind+title+'\t'+destination+'\t'+host+'\t'+port;
 	}
 }
