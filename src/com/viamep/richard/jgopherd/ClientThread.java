@@ -62,13 +62,7 @@ public class ClientThread extends Thread {
 		while (true) {
 			try {
 				line = in.readLine().replaceAll("\r","").replaceAll("\n","").replaceAll("\\.\\.","");
-				//line = in.readLine();
 			} catch (SocketTimeoutException e) {
-				/*try {
-					Main.log.warning("Connection from "+source+" timed out ("+socket.getSoTimeout()+" seconds)");
-				} catch (Throwable e1) {
-					Main.log.warning("Connection from "+source+" timed out");
-				}*/
 				continue;
 			} catch (Throwable e) {
 				continue;
