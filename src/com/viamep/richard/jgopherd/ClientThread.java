@@ -66,6 +66,7 @@ public class ClientThread extends Thread {
 		String httpreq = "";
 		String httppath = "";
 		String httpparams = "";
+		String httpraw = "";
 		char httpkind = '1';
 		boolean nomole = false;
 		while (true) {
@@ -96,29 +97,49 @@ public class ClientThread extends Thread {
 			if (line.startsWith("/GET ") || line.startsWith("/POST ")) {
 				log = false;
 				http = true;
-				params = params.replaceFirst(" HTTP\\/.+$","");
+				int temp;
 				try {
-					httppath = Util.GetArray(line.split(" ")[1].split("/"),"/",2,0);
+					temp = line.split(" ")[1].split("/")[1].length();
 				} catch (Throwable e) {
-					httppath = "/";
+					temp = 1;
 				}
-				if (!httppath.startsWith("/")) httppath = "/"+httppath;
-				try {
-					httpreq = httppath+((params == "") ? "" : "?"+params);
-				} catch (Throwable e) {
-					httpreq = "/";
-				}
-				try {
-					httpparams = URLDecoder.decode(params,"UTF-8");
-				} catch (Throwable e) {
-					httpparams = params;
-				}
-				try {
-					httpkind = line.split(" ")[1].charAt(1);
-				} catch (Throwable e) {
-					httpkind = '1';
+				if (temp > 1) {
+					httpraw = line.split(" ")[1];
+				} else {
+					params = params.replaceFirst(" HTTP\\/.+$","");
+					try {
+						httppath = Util.GetArray(line.split(" ")[1].split("/"),"/",2,0);
+					} catch (Throwable e) {
+						httppath = "/";
+					}
+					if (!httppath.startsWith("/")) httppath = "/"+httppath;
+					try {
+						httpreq = httppath+((params == "") ? "" : "?"+params);
+					} catch (Throwable e) {
+						httpreq = "/";
+					}
+					try {
+						httpparams = URLDecoder.decode(params,"UTF-8");
+					} catch (Throwable e) {
+						httpparams = params;
+					}
+					try {
+						httpkind = line.split(" ")[1].charAt(1);
+					} catch (Throwable e) {
+						httpkind = '1';
+					}
 				}
 			} else if (http && (line.equalsIgnoreCase("/"))) {
+				if ((httpraw != null) && (httpraw != "")) {
+					if (httpraw.equalsIgnoreCase("/robots.txt")) {
+						out.println("HTTP/1.1 200 OK");
+						out.println("Content-Type: text/plain");
+						out.println("");
+						out.println("User-agent: *");
+						out.println("Disallow: /");
+					}
+					break;
+				}
 				log = true;
 				scode = 200;
 				ArrayList<GopherEntry> al = MakeEntries(httppath,httpparams,nomole);
