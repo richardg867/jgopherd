@@ -103,13 +103,13 @@ public class Util {
 	
 	public static String GetContentTypeForKind(char kind) {
 		if (kind=='0') return "text/plain";
+		if (kind=='1'||kind=='h') return "text/html";
 		if (kind==';') return "video/*";
 		if (kind=='4'||kind=='5'||kind=='6'||kind=='9') return "application/octet-stream";
 		if (kind=='d') return "text/pdf";
 		if (kind=='g') return "image/gif";
 		if (kind=='p') return "image/png";
 		if (kind=='I') return "image/*";
-		if (kind=='h') return "text/html";
 		if (kind=='s') return "audio/*";
 		return "text/html";
 	}
