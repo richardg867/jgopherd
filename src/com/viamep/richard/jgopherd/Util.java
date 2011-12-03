@@ -81,7 +81,7 @@ public class Util {
 	}
 	
 	public static String HTMLEscape(String text) {
-		return text.replaceAll("\\<","&lt;").replaceAll("\\>","&gt;").replaceAll("\\&","&amp;").replaceAll("\"","&quot;").replaceAll("|","&#124;");
+		return text.replaceAll("\\<","&lt;").replaceAll("\\>","&gt;").replaceAll("\\&","&amp;").replaceAll("\"","&quot;").replaceAll("\\|","&#124;");
 	}
 	
 	public static String GetFullKind(char kind) {
