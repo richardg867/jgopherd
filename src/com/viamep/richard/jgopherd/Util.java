@@ -11,7 +11,7 @@ public class Util {
 		return bytes+" bytes";
 	}
 	
-	public static String GetArray(String[] Arr, int IndexFrom, int IndexTo) {
+	public static String GetArray(String[] Arr, String Delimiter, int IndexFrom, int IndexTo) {
 		String Temp = "";
 		int TmpIndex = 0;
 		if (IndexTo == 0) {
@@ -20,10 +20,14 @@ public class Util {
 			TmpIndex = IndexTo;
 		}
 		for (int i = IndexFrom; i < TmpIndex; i++) {
-			Temp += " ";
+			Temp += Delimiter;
 			Temp += Arr[i];
 		}
-		return Temp.replaceFirst(" ","");
+		return Temp.replaceFirst(Delimiter,"");
+	}
+	
+	public static String GetArray(String[] Arr, int IndexFrom, int IndexTo) {
+		return GetArray(Arr," ",IndexFrom,IndexTo);
 	}
 	
 	public static <T> T[] ConcatArrays(T[] first, T[]... rest) {
