@@ -48,7 +48,6 @@ public class ClientThread extends Thread {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void run() {
 		addr = (InetSocketAddress)socket.getRemoteSocketAddress();
 		String source = addr.getHostName()+":"+addr.getPort();
@@ -174,9 +173,9 @@ public class ClientThread extends Thread {
 					}
 					URL[] urla = {url};
 					URLClassLoader ucl = new URLClassLoader(urla);
-					Class<JMole> cls;
+					Class<? extends JMole> cls;
 					try {
-						cls = (Class<JMole>)ucl.loadClass(f.getName().substring(0,f.getName().length()-6));
+						cls = (Class<? extends JMole>)ucl.loadClass(f.getName().substring(0,f.getName().length()-6)).asSubclass(JMole.class);
 					} catch (Throwable e) {
 						MakeError("Error while loading j-mole: Invalid class",e);
 						break;
