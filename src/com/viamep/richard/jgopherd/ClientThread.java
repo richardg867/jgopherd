@@ -101,7 +101,7 @@ public class ClientThread extends Thread {
 					log = false;
 					http = true;
 					try {
-						httpreq = line.split(" ")[1].split("/")[2];
+						httpreq = Util.GetArray(line.split(" ")[1].split("/"),2,0);
 					} catch (Throwable e) {
 						httpreq = "/";
 					}
