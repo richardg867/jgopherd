@@ -21,6 +21,10 @@ public class ClientThread extends Thread {
 	private PrintWriter out;
 	private BufferedReader in;
 	private int scode;
+	private InetSocketAddress addr;
+	private String line;
+	private String params;
+	private String fline;
 	
 	public ClientThread(Socket sock) {
 		socket = sock;
@@ -45,10 +49,10 @@ public class ClientThread extends Thread {
 	
 	@SuppressWarnings("unchecked")
 	public void run() {
-		InetSocketAddress addr = (InetSocketAddress)socket.getRemoteSocketAddress();
+		addr = (InetSocketAddress)socket.getRemoteSocketAddress();
 		String source = addr.getHostName()+":"+addr.getPort();
-		String line = "";
-		String fline = "";
+		line = "";
+		fline = "";
 		scode = 500;
 		boolean log = true;
 		boolean http = false;
@@ -77,7 +81,6 @@ public class ClientThread extends Thread {
 			} catch (Throwable e) {
 				line = "/";
 			}
-			String params;
 			try {
 				params = linex[1];
 			} catch (Throwable e) {
@@ -110,7 +113,7 @@ public class ClientThread extends Thread {
 					if (!httpreq.startsWith("/")) httpreq = "/"+httpreq;
 				} else if (http && (line.equalsIgnoreCase("/"))) {
 					scode = 200;
-					ArrayList<GopherEntry> al = MakeEntries(httpreq);
+					ArrayList<GopherEntry> al = MakeEntries(httpreq,nomole);
 					boolean haserror = false;
 					for (GopherEntry ge : al) {
 						if (ge.kind == '3') haserror = true;
@@ -152,41 +155,6 @@ public class ClientThread extends Thread {
 					break;
 				} else if (http) {
 					continue;
-				} else if (Util.IsExecutable(f) && !nomole) {
-					scode = 200;
-					ArrayList<String> envvars = new ArrayList<String>();
-					envvars.add("REMOTE_HOST="+addr.getHostName());
-					envvars.add("REMOTE_ADDR="+addr.getHostString());
-					envvars.add("REMOTE_PORT="+addr.getPort());
-					envvars.add("SERVER_HOST="+Main.props.getPropertyString("name","127.0.0.1"));
-					envvars.add("SERVER_PORT="+Main.props.getPropertyInt("port",70));
-					envvars.add("SELECTOR="+fline);
-					envvars.add("REQUEST="+line);
-					Process prc;
-					try {
-						String[] sa = {f.getAbsolutePath()};
-						prc = Runtime.getRuntime().exec(Util.ConcatArrays(sa,params.split(" ")),(String[])envvars.toArray(new String[envvars.size()]),f.getParentFile());
-					} catch (Throwable e) {
-						scode = 500;
-						MakeError("Error while trying to execute mole",e);
-						break;
-					}
-					BufferedReader pos = new BufferedReader(new InputStreamReader(prc.getInputStream()));
-					String ln;
-					while (true) {
-						try {
-							ln = pos.readLine();
-						} catch (Throwable e) {
-							continue;
-						}
-						out.println(ln);
-						try {
-							prc.exitValue();
-							break;
-						} catch (Throwable e) {
-							continue;
-						}
-					}
 				} else if (f.getName().endsWith(".class") && f.exists() && !nomole) {
 					scode = 500;
 					URL url;
@@ -226,7 +194,7 @@ public class ClientThread extends Thread {
 					}
 				} else {
 					scode = 200;
-					for (GopherEntry ge : MakeEntries(line)) {
+					for (GopherEntry ge : MakeEntries(line,nomole)) {
 						if (ge.kind == '3') scode = 404;
 						out.println(ge.GetAsRaw());
 					}
@@ -265,7 +233,7 @@ public class ClientThread extends Thread {
 		return MakeError(error,Util.ConcatArrays(sst,sw.toString().split("\n"),est));
 	}
 	
-	private ArrayList<GopherEntry> MakeEntries(String line) {
+	private ArrayList<GopherEntry> MakeEntries(String line, boolean nomole) {
 		ArrayList<GopherEntry> al = new ArrayList<GopherEntry>();
 		File f = new File(Main.props.getPropertyString("root","gopherdocs")+line);
 		if (f.isDirectory()) {
@@ -287,6 +255,40 @@ public class ClientThread extends Thread {
 				return al;
 			}
 			return new BuckGophermap().parse(line,fis);
+		} else if (Util.IsExecutable(f) && !nomole) {
+			scode = 200;
+			ArrayList<String> envvars = new ArrayList<String>();
+			envvars.add("REMOTE_HOST="+addr.getHostName());
+			envvars.add("REMOTE_ADDR="+addr.getHostString());
+			envvars.add("REMOTE_PORT="+addr.getPort());
+			envvars.add("SERVER_HOST="+Main.props.getPropertyString("name","127.0.0.1"));
+			envvars.add("SERVER_PORT="+Main.props.getPropertyInt("port",70));
+			envvars.add("SELECTOR="+fline);
+			envvars.add("REQUEST="+line);
+			Process prc = null;
+			try {
+				String[] sa = {f.getAbsolutePath()};
+				prc = Runtime.getRuntime().exec(Util.ConcatArrays(sa,params.split(" ")),(String[])envvars.toArray(new String[envvars.size()]),f.getParentFile());
+			} catch (Throwable e) {
+				scode = 500;
+				return MakeError("Error while trying to execute mole",e);
+			}
+			BufferedReader pos = new BufferedReader(new InputStreamReader(prc.getInputStream()));
+			String ln;
+			while (true) {
+				try {
+					ln = pos.readLine();
+				} catch (Throwable e) {
+					continue;
+				}
+				out.println(ln);
+				try {
+					prc.exitValue();
+					break;
+				} catch (Throwable e) {
+					continue;
+				}
+			}
 		} else {
 			scode = 404;
 			if (line.equalsIgnoreCase("/")) {
