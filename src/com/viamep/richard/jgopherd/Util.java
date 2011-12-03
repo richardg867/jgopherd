@@ -100,4 +100,6 @@ public class Util {
 		if (kind=='s') return "[SND]";
 		return "[GEN]";
 	}
+	
+	
 }

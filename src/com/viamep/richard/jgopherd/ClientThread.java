@@ -13,6 +13,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -57,6 +58,8 @@ public class ClientThread extends Thread {
 		boolean log = true;
 		boolean http = false;
 		String httpreq = "";
+		String httppath = "";
+		String httpparams = "";
 		char httpkind = '1';
 		boolean nomole = false;
 		while (true) {
@@ -94,20 +97,31 @@ public class ClientThread extends Thread {
 				if (line.startsWith("/GET ") || line.startsWith("/POST ")) {
 					log = false;
 					http = true;
+					params = params.replaceFirst(" HTTP\\/.+$","");
 					try {
-						httpreq = Util.GetArray(line.split(" ")[1].split("/"),"/",2,0);
+						httppath = Util.GetArray(line.split(" ")[1].split("/"),"/",2,0);
+					} catch (Throwable e) {
+						httppath = "/";
+					}
+					if (!httppath.startsWith("/")) httppath = "/"+httppath;
+					try {
+						httpreq = httppath+((params == "") ? "" : "?"+params);
 					} catch (Throwable e) {
 						httpreq = "/";
+					}
+					try {
+						httpparams = URLDecoder.decode(params,"UTF-8");
+					} catch (Throwable e) {
+						httpparams = params;
 					}
 					try {
 						httpkind = line.split(" ")[1].charAt(1);
 					} catch (Throwable e) {
 						httpkind = '1';
 					}
-					if (!httpreq.startsWith("/")) httpreq = "/"+httpreq;
 				} else if (http && (line.equalsIgnoreCase("/"))) {
 					scode = 200;
-					ArrayList<GopherEntry> al = MakeEntries(httpreq,nomole);
+					ArrayList<GopherEntry> al = MakeEntries(httppath,httpparams,nomole);
 					boolean haserror = false;
 					for (GopherEntry ge : al) {
 						if (ge.kind == '3') haserror = true;
@@ -116,8 +130,8 @@ public class ClientThread extends Thread {
 					if (httpkind == '1') {
 						out.println("Content-Type: text/html");
 						out.println("");
-						out.println("<html><head><title>Gopher: "+Util.HTMLEscape(httpreq)+"</title></head><body>");
-						out.println("<h2><a href=\"/1\">[/]</a> Gopher: "+Util.HTMLEscape(httpreq)+"</h2><hr>");
+						out.println("<html><head><title>Gopher: "+Util.HTMLEscape(httppath)+"</title></head><body>");
+						out.println("<h2><a href=\"/1\">[/]</a> Gopher: "+Util.HTMLEscape(httppath)+"</h2><hr>");
 						out.println("<table border=\"0\"><tbody>");
 						for (GopherEntry ge : al) {
 							if (ge.kind == 'i') {
@@ -188,7 +202,7 @@ public class ClientThread extends Thread {
 					}
 				} else {
 					scode = 200;
-					for (GopherEntry ge : MakeEntries(line,nomole)) {
+					for (GopherEntry ge : MakeEntries(line,params,nomole)) {
 						if (ge.kind == '3') scode = 404;
 						out.println(ge.GetAsRaw());
 					}
@@ -227,7 +241,8 @@ public class ClientThread extends Thread {
 		return MakeError(error,Util.ConcatArrays(sst,sw.toString().split("\n"),est));
 	}
 	
-	private ArrayList<GopherEntry> MakeEntries(String line, boolean nomole) {
+	public ArrayList<GopherEntry> MakeEntries(String line, String params, boolean nomole, String proxyip, int proxyport) {
+		if (addr == null) addr = new InetSocketAddress(proxyip,proxyport);
 		ArrayList<GopherEntry> al = new ArrayList<GopherEntry>();
 		File f = new File(Main.props.getPropertyString("root","gopherdocs")+line);
 		if (f.isDirectory()) {
@@ -288,5 +303,9 @@ public class ClientThread extends Thread {
 			}
 		}
 		return al;
+	}
+	
+	public ArrayList<GopherEntry> MakeEntries(String line, String params, boolean nomole) {
+		return MakeEntries(line,params,nomole,"0.0.0.0",65535);
 	}
 }
