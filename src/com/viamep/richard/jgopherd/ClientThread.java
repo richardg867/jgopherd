@@ -245,7 +245,7 @@ public class ClientThread extends Thread {
 			out.println("ServerSoftware=jgopherd");
 			out.println("ServerSoftwareVersion="+Main.version);
 			out.println("ServerArchitecture="+System.getProperty("os.arch"));
-			out.println("ServerDescription="+System.getProperty("os.name")+" running JVM "+System.getProperty("java.vendor")+" version "+System.getProperty("java.version")+" ("+System.getProperty("java.vendor.url")+")");
+			out.println("ServerDescription="+System.getProperty("os.name")+" v"+System.getProperty("os.version")+" running JVM "+System.getProperty("java.vendor")+" version "+System.getProperty("java.version")+" ("+System.getProperty("java.vendor.url")+")");
 			out.println("ServerGeolocationString=");
 		} else if (f.isDirectory()) {
 			FileInputStream fis;
