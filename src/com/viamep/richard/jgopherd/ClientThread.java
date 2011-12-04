@@ -309,7 +309,7 @@ public class ClientThread extends Thread {
 			envmap.put("SERVER_HOST",Main.props.getPropertyString("name","127.0.0.1"));
 			envmap.put("SERVER_PORT",""+Main.props.getPropertyInt("port",70));
 			envmap.put("SELECTOR",fline);
-			envmap.put("PARAMS",fline);
+			envmap.put("PARAMS",params);
 			envmap.put("REQUEST",line);
 			ArrayList<GopherEntry> entries;
 			try {
