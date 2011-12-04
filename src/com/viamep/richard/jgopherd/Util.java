@@ -124,4 +124,8 @@ public class Util {
 		}
 		return def;
 	}
+	
+	public static String HTMLDecode(String text) {
+		return text.replaceAll("&amp;","&").replaceAll("&quot;","\"");
+	}
 }
