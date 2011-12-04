@@ -127,6 +127,6 @@ public class Util {
 	}
 	
 	public static String HTMLDecode(String text) {
-		return text.replaceAll("&amp;","&").replaceAll("&quot;","\"");
+		return text.replaceAll("&amp;","&").replaceAll("&quot;","\"").replaceAll("&lt;","<").replaceAll("&gt;",">");
 	}
 }
