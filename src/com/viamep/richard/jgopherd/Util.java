@@ -92,6 +92,7 @@ public class Util {
 		if (kind=='3') return "";
 		if (kind==';') return "[MOV]";
 		if (kind=='4'||kind=='5'||kind=='6'||kind=='9') return "[BIN]";
+		if (kind=='7') return "[APP]";
 		if (kind=='8'||kind=='T') return "[TLN]";
 		if (kind=='d') return "[PDF]";
 		if (kind=='g'||kind=='I'||kind=='p') return "[IMG]";
