@@ -175,7 +175,7 @@ public class ClientThread extends Thread {
 						} else if ((ge.kind == 'h') && (ge.destination.startsWith("URL:"))) {
 							out.println("<tr><td><pre>[URL]</pre></td><td><pre><a href=\""+ge.destination.substring(4)+"\">"+ge.title+"</a></pre></td></tr>");
 						} else if (ge.kind == '7') {
-							out.println("<tr><td><pre>[APP]</pre></td><td><pre><a href=\"#\" onClick=\"window.location.href='"+((ge.host == Main.props.getPropertyString("name","127.0.0.1")) ? "http" : "gopher")+"://"+ge.host+":"+ge.port+"/"+ge.kind+ge.destination+"'+prompt('Enter parameters for the remote server to process:','');\">"+ge.title+"</a></pre></td></tr>");
+							out.println("<tr><td><pre>[APP]</pre></td><td><pre><a href=\"#\" onClick=\"window.location.href='"+((ge.host == Main.props.getPropertyString("name","127.0.0.1")) ? "http" : "gopher")+"://"+ge.host+":"+ge.port+"/"+ge.kind+ge.destination+"?'+prompt('Enter parameters for the remote server to process:','');\">"+ge.title+"</a></pre></td></tr>");
 						} else {
 							out.println("<tr><td><pre>"+Util.GetFullKind(ge.kind)+"</pre></td><td><pre><a href=\""+((ge.host == Main.props.getPropertyString("name","127.0.0.1")) ? "http" : "gopher")+"://"+ge.host+":"+ge.port+"/"+ge.kind+ge.destination+"\">"+ge.title+"</a></pre></td></tr>");
 						}
