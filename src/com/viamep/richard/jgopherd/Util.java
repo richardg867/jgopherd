@@ -66,7 +66,7 @@ public class Util {
 		return IsExecutable(file.getAbsolutePath());
 	}
 	
-	public static char GetType(String filename) {
+	public static char GetKind(String filename) {
 		if (new File(filename).isDirectory()) return '1';
 		String fn = filename.toLowerCase();
 		if (fn.endsWith(".txt")||fn.endsWith(".log")||fn.endsWith(".sql")) return '0';

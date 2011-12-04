@@ -258,7 +258,7 @@ public class ClientThread extends Thread {
 				for (String fn : new File(Main.props.getPropertyString("root","gopherdocs")+line).list()) {
 					if (!fn.equalsIgnoreCase("gophermap")&&!fn.equalsIgnoreCase("gophertag")) {
 						f1 = new File(fn);
-						al.add(new GopherEntry(Util.GetType(Main.props.getPropertyString("root","gopherdocs")+line+"/"+f1.getName()),f1.getName(),(line.endsWith("/") ? line.substring(0,line.length()-1) : line)+"/"+f1.getName()));
+						al.add(new GopherEntry(Util.GetKind(Main.props.getPropertyString("root","gopherdocs")+line+"/"+f1.getName()),f1.getName(),(line.endsWith("/") ? line.substring(0,line.length()-1) : line)+"/"+f1.getName()));
 					}
 				}
 				al.add(new GopherEntry('i'));
