@@ -313,7 +313,7 @@ public class ClientThread extends Thread {
 			envmap.put("REQUEST",line);
 			ArrayList<GopherEntry> entries;
 			try {
-				entries = cls.newInstance().run(envmap);
+				entries = cls.newInstance().run(envmap,os);
 			} catch (Throwable e) {
 				return MakeError("Error while executing j-mole",e);
 			}
