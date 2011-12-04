@@ -172,8 +172,10 @@ public class ClientThread extends Thread {
 							out.println("<tr><td>&nbsp;</td><td><pre>"+ge.title+"</pre></td></tr>");
 						} else if (ge.kind == '3') {
 							out.println("<tr><td>&nbsp;</td><td><pre><font color=\"red\"><b>"+ge.title+"</b></font></pre></td></tr>");
+						} else if ((ge.kind == 'h') && (ge.destination.startsWith("URL:"))) {
+							out.println("<tr><td><pre>[URL]</pre></td><td><pre><a href=\""+ge.destination.substring(4)+"\">"+ge.title+"</a></pre></td></tr>");
 						} else {
-							out.println("<tr><td><pre>"+Util.GetFullKind((ge.destination.startsWith("URL:")) ? 'U' : ge.kind)+"</pre></td><td><pre><a href=\""+((ge.host == Main.props.getPropertyString("name","127.0.0.1")) ? "http" : "gopher")+"://"+ge.host+":"+ge.port+"/"+ge.kind+ge.destination+"\">"+ge.title+"</a></pre></td></tr>");
+							out.println("<tr><td><pre>"+Util.GetFullKind(ge.kind)+"</pre></td><td><pre><a href=\""+((ge.host == Main.props.getPropertyString("name","127.0.0.1")) ? "http" : "gopher")+"://"+ge.host+":"+ge.port+"/"+ge.kind+ge.destination+"\">"+ge.title+"</a></pre></td></tr>");
 						}
 					}
 					out.println("</tbody></table>");
