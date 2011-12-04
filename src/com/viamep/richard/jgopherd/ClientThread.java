@@ -188,12 +188,11 @@ public class ClientThread extends Thread {
 				for (GopherEntry ge : MakeEntries(line,params,nomole)) {
 					out.println(ge.GetAsRaw());
 				}
-				out.println(".");
 				break;
 			}
 		}
 		if (log) Main.log.finest((http ? "H" : "G")+" "+source+" "+scode+" "+(http ? httppath : line));
-		if (!http && !nodot) out.println(".");
+		//if (!http && !nodot) out.println(".");
 		try {
 			socket.close();
 		} catch (IOException e) {
