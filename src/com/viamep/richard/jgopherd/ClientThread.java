@@ -80,7 +80,7 @@ public class ClientThread extends Thread {
 		boolean nomole = false;
 		while (true) {
 			try {
-				line = in.readLine().replaceAll("\r","").replaceAll("\n","").replaceAll("\\.\\.","");
+				line = in.readLine().replaceAll("\\r|\\n|\\.\\.","").replaceAll("\t","?");
 			} catch (SocketTimeoutException e) {
 				continue;
 			} catch (Throwable e) {
