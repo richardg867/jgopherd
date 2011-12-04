@@ -71,7 +71,7 @@ public class Util {
 		String fn = filename.toLowerCase();
 		if (fn.endsWith(".txt")||fn.endsWith(".log")||fn.endsWith(".sql")) return '0';
 		if (fn.endsWith(".gif")) return 'g';
-		if (fn.endsWith(".jpg")||fn.endsWith(".jpeg")||fn.endsWith(".pict")||fn.endsWith(".svg")||fn.endsWith(".ico")||fn.endsWith(".icon")||fn.endsWith(".icns")||fn.endsWith(".tiff")||fn.endsWith(".tif")||fn.endsWith(".bmp")) return 'g';
+		if (fn.endsWith(".jpg")||fn.endsWith(".jpeg")||fn.endsWith(".pict")||fn.endsWith(".svg")||fn.endsWith(".ico")||fn.endsWith(".icon")||fn.endsWith(".icns")||fn.endsWith(".tiff")||fn.endsWith(".tif")||fn.endsWith(".bmp")) return 'I';
 		if (fn.endsWith(".png")) return 'p';
 		if (fn.endsWith(".pdf")) return 'd';
 		if (fn.endsWith(".htm")||fn.endsWith(".html")) return 'h';
