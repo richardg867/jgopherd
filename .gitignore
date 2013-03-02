@@ -1,4 +1,8 @@
 /gopherdocs
-/jgopherd.conf
+/jgopherd.cfg
 /jgopherd.log
 /jgopherd.log.lck
+/.metadata
+/.settings
+/src_old
+/bin

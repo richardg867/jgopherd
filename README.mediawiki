@@ -1,4 +1,0 @@
-== jgopherd: The Java gopher server ==
-The repository is an Eclipse project - just import it into your workspace and start building or hacking.
-
-Please note that my test gopherdocs and configuration are included - it's a [https://bugs.eclipse.org/bugs/show_bug.cgi?id=300964 bug when running EGit on Windows].
