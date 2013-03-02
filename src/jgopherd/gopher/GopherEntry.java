@@ -3,7 +3,7 @@ package jgopherd.gopher;
 import jgopherd.core.Main;
 
 /**
- * A full Gopher entry.
+ * A full gopher entry.
  * 
  * @author Richard
  */

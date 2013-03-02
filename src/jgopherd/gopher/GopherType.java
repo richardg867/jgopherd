@@ -1,7 +1,7 @@
 package jgopherd.gopher;
 
 /**
- * Gopher item types.
+ * Menu item types.
  * 
  * References:
  * - RFC 1436

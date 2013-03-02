@@ -24,6 +24,13 @@ import jgopherd.mole.InternalMole;
 import jgopherd.mole.JarMole;
 import jgopherd.mole.Mole;
 
+/**
+ * TCP gopher client thread.
+ * 
+ * Parses the bulk of the gopher request, passing it off to moles or serving files.
+ * 
+ * @author Richard
+ */
 public class ClientThread implements Runnable {
 	public static final Mole[] MOLES = new Mole[] {new InternalMole(), new JarMole(), new ForkMole()};
 	public static final Mole[] MAP_MOLES = new Mole[] {new BuckMapMole(), new DefaultMapMole()};
@@ -54,7 +61,7 @@ public class ClientThread implements Runnable {
 			
 			line = reader.readLine();
 		} catch (Throwable e) {
-			return new GopherRequest("[unknown]", socket.getInetAddress(), socket.getPort(), null, 501);
+			return new GopherRequest("[unknown]", socket.getInetAddress(), socket.getPort(), 501);
 		}
 		
 		while (line.startsWith("/")) line = line.substring(1);
@@ -64,7 +71,7 @@ public class ClientThread implements Runnable {
 			// oh please
 		}
 		
-		GopherRequest request = new GopherRequest(line, socket.getInetAddress(), socket.getPort(), createFile(line));
+		GopherRequest request = new GopherRequest(line, socket.getInetAddress(), socket.getPort());
 		request.outputStream = outputStream;
 		
 		Mole mole = null;
@@ -157,11 +164,6 @@ public class ClientThread implements Runnable {
 		
 		closeSocket();
 		return request;
-	}
-	
-	public File createFile(String dest) {
-		String sanitized = dest.split("\\?")[0].replace("..", "");
-		return new File(Main.config.documentRoot, sanitized);
 	}
 	
 	public void closeSocket() {

@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.OutputStream;
 import java.net.InetAddress;
 
+import jgopherd.core.Main;
+
 /**
- * A Gopher request made by a client.
+ * A gopher request made by a client.
  * 
  * @author Richard
  */
@@ -20,17 +22,29 @@ public class GopherRequest {
 	public OutputStream outputStream;
 	public int code = 200;
 	
-	public GopherRequest(String dest, InetAddress client, int port, File file) {
-		String[] split = dest.split("\\?");
-		this.path = split[0];
-		this.params = split.length < 2 ? "" : split[1];
+	public GopherRequest(String path, InetAddress client, int port) {
+		int idx = path.indexOf('?');
+		if (idx > -1) {
+			this.path = path.substring(0, idx);
+			this.params = path.substring(idx + 1);
+		} else {
+			this.path = path;
+			this.params = "";
+		}
+		System.out.println(this.path);
+		System.out.println(this.params);
 		this.client = client;
 		this.port = port;
-		this.file = file;
+		this.file = createFile();
 	}
 	
-	public GopherRequest(String dest, InetAddress client, int port, File file, int code) {
-		this(dest, client, port, file);
+	public GopherRequest(String dest, InetAddress client, int port, int code) {
+		this(dest, client, port);
 		this.code = code;
+	}
+	
+	public File createFile() {
+		String sanitized = path.replace("..", "");
+		return new File(Main.config.documentRoot, sanitized);
 	}
 }

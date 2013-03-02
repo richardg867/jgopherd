@@ -8,6 +8,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 
+/**
+ * TCP gopher listener thread.
+ * 
+ * @author Richard
+ */
 public class ListenerThread implements Runnable {
 	public final ExecutorService pool = Executors.newFixedThreadPool(64, new ThreadFactory() {
 		@Override
