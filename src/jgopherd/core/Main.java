@@ -1,12 +1,13 @@
 package jgopherd.core;
 
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.logging.ConsoleHandler;
-import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.StreamHandler;
 
 /**
  * Main server class.
@@ -34,8 +35,10 @@ public class Main {
 		Handler handler;
 		log.setUseParentHandlers(false);
 		log.addHandler(handler = new ConsoleHandler());
-		handler.setFormatter(new LogFormatter());
-		log.addHandler(new FileHandler(LOG_FILE));
+		LogFormatter formatter = new LogFormatter();
+		handler.setFormatter(formatter);
+		StreamHandler fileHandler;
+		log.addHandler(fileHandler = new StreamHandler(new FileOutputStream(LOG_FILE), formatter));
 		
 		log.log(Level.INFO, "jgopherd version " + VERSION + " starting");
 		
@@ -64,6 +67,7 @@ public class Main {
 		thread.start();
 		
 		while (true) {
+			fileHandler.flush();
 			Thread.sleep(1000L);
 		}
 	}

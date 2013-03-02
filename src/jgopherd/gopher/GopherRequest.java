@@ -31,8 +31,6 @@ public class GopherRequest {
 			this.path = path;
 			this.params = "";
 		}
-		System.out.println(this.path);
-		System.out.println(this.params);
 		this.client = client;
 		this.port = port;
 		this.file = createFile();
