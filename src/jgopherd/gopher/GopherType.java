@@ -1,7 +1,11 @@
 package jgopherd.gopher;
 
 /**
- * Gopher types, as defined by both the RFC and OverbiteFF.
+ * Gopher item types.
+ * 
+ * References:
+ * - RFC 1436
+ * - OverbiteFF source
  * 
  * @author Richard
  */
@@ -32,7 +36,13 @@ public enum GopherType {
 	 */
 	public static final GopherType[] VALUES = values();
 	
+	/**
+	 * Type character
+	 */
 	public final char type;
+	/**
+	 * File extensions this type should represent, or null for a non-item type
+	 */
 	public final String[] extensions;
 	
 	private GopherType(char type, String[] extensions) {
@@ -40,6 +50,12 @@ public enum GopherType {
 		this.extensions = extensions;
 	}
 	
+	/**
+	 * Gets the GopherType for the specified type character.
+	 * 
+	 * @param type Type character
+	 * @return Type, or null if not found
+	 */
 	public static GopherType fromType(char type) {
 		for (GopherType gtype : VALUES) {
 			if (gtype.type == type) return gtype;
@@ -48,6 +64,12 @@ public enum GopherType {
 		return null;
 	}
 	
+	/**
+	 * Gets the GopherType for the specified file name through the extension.
+	 * 
+	 * @param filename File name
+	 * @return Type, or null if none can represent the extension
+	 */
 	public static GopherType fromExtension(String filename) {
 		String lower = filename.toLowerCase();
 		for (GopherType gtype : VALUES) {

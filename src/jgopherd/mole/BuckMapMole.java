@@ -25,7 +25,7 @@ public class BuckMapMole extends Mole {
 		List<GopherEntry> result = new LinkedList<GopherEntry>();
 		
 		String line;
-		while ((line = reader.readLine()) != null) { // TODO log formatter, proper moles? test buck gophermap, live test
+		while ((line = reader.readLine()) != null) {
 			String[] split = line.split("\t");
 			if (split.length < 1) continue;
 			else if (split.length == 1) {

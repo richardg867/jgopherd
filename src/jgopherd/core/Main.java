@@ -7,6 +7,11 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Main server class.
+ * 
+ * @author Richard
+ */
 public class Main {
 	public static final String VERSION = "0.2";
 	public static final String CONFIG_FILE = "jgopherd.cfg";
@@ -18,6 +23,11 @@ public class Main {
 	public static boolean serverStopped = false;
 	public static boolean executeSupported = true;
 	
+	/**
+	 * Server entry point
+	 * 
+	 * @param args Arguments passed to the server
+	 */
 	public static void main(String[] args) throws Throwable {
 		Handler handler;
 		log.setUseParentHandlers(false);
