@@ -3,6 +3,7 @@ package jgopherd.core;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +16,7 @@ import java.util.logging.Logger;
 public class Main {
 	public static final String VERSION = "0.2";
 	public static final String CONFIG_FILE = "jgopherd.cfg";
+	public static final String LOG_FILE = "jgopherd.log";
 	
 	public static Logger log = Logger.getLogger("jgopherd");
 	public static Configuration config;
@@ -33,6 +35,7 @@ public class Main {
 		log.setUseParentHandlers(false);
 		log.addHandler(handler = new ConsoleHandler());
 		handler.setFormatter(new LogFormatter());
+		log.addHandler(new FileHandler(LOG_FILE));
 		
 		log.log(Level.INFO, "jgopherd version " + VERSION + " starting");
 		
