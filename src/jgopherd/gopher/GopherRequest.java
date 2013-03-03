@@ -24,6 +24,7 @@ public class GopherRequest {
 	
 	public GopherRequest(String path, InetAddress client, int port) {
 		int idx = path.indexOf('?');
+		if (idx == -1) idx = path.indexOf('\t');
 		if (idx > -1) {
 			this.path = path.substring(0, idx);
 			this.params = path.substring(idx + 1);

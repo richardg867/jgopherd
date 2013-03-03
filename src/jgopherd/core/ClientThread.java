@@ -53,6 +53,7 @@ public class ClientThread implements Runnable {
 	public GopherRequest request() {
 		String line;
 		OutputStream outputStream;
+		GopherRequest request = new GopherRequest("[unknown]", socket.getInetAddress(), socket.getPort(), 501);
 		
 		try {
 			socket.setSoTimeout(Main.config.requestTimeout);
@@ -61,8 +62,10 @@ public class ClientThread implements Runnable {
 			
 			line = reader.readLine();
 		} catch (Throwable e) {
-			return new GopherRequest("[unknown]", socket.getInetAddress(), socket.getPort(), 501);
+			return request;
 		}
+		
+		if (line == null) return request;
 		
 		while (line.startsWith("/")) line = line.substring(1);
 		try {
@@ -71,7 +74,7 @@ public class ClientThread implements Runnable {
 			// oh please
 		}
 		
-		GopherRequest request = new GopherRequest(line, socket.getInetAddress(), socket.getPort());
+		request = new GopherRequest(line, socket.getInetAddress(), socket.getPort());
 		request.outputStream = outputStream;
 		
 		Mole mole = null;
