@@ -21,6 +21,10 @@ public class Configuration extends Properties {
 	@Property
 	public boolean printRequests = true;
 	@Property
+	public boolean executeSupported = Main.executeSupported;
+	@Property
+	public String moleRegex = "\\.mol$";
+	@Property
 	public boolean exposeStats = true;
 	@Property
 	public boolean exposeCaps = true;

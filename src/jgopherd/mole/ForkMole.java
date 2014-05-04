@@ -21,7 +21,7 @@ import jgopherd.gopher.GopherRequest;
 public class ForkMole extends Mole {
 	@Override
 	public boolean canHandle(GopherRequest request) {
-		return request.file.exists() && (Main.executeSupported ? request.file.canExecute() : request.file.getName().endsWith(".mol"));
+		return request.file.exists() && (Main.config.executeSupported ? request.file.canExecute() : request.file.getName().matches(Main.config.moleRegex));
 	}
 	
 	@Override
