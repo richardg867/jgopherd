@@ -27,7 +27,7 @@ public class ForkMole extends Mole {
 		List<String> params = new ArrayList<String>();
 		if (System.getProperty("os.name").contains("Windows")) {
 			// Take advantage of the fact cmd.exe can and will run ordinary files with their associated programs
-			params.add("molehelper.bat");
+			params.add("molehelper.cmd");
 		}
 		params.add(request.file.getAbsolutePath());
 		params.addAll(Arrays.asList(request.params.split(" ")));
