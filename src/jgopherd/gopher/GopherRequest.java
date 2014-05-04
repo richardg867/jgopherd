@@ -22,14 +22,14 @@ public class GopherRequest {
 	public OutputStream outputStream;
 	public int code = 200;
 	
-	public GopherRequest(String path, InetAddress client, int port) {
-		int idx = path.indexOf('?');
-		if (idx == -1) idx = path.indexOf('\t');
+	public GopherRequest(String request, InetAddress client, int port) {
+		int idx = request.indexOf('?');
+		if (idx == -1) idx = request.indexOf('\t');
 		if (idx > -1) {
-			this.path = path.substring(0, idx);
-			this.params = path.substring(idx + 1);
+			this.path = request.substring(0, idx);
+			this.params = request.substring(idx + 1);
 		} else {
-			this.path = path;
+			this.path = request;
 			this.params = "";
 		}
 		this.client = client;

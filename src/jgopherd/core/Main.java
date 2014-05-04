@@ -57,7 +57,7 @@ public class Main {
 		try {
 			config.store(new FileWriter(CONFIG_FILE), "jgopherd configuration file");
 		} catch (Throwable e) {
-			log.log(Level.SEVERE, "Cofniguration file failed to save!");
+			log.log(Level.SEVERE, "Configuration file failed to save!");
 			e.printStackTrace();
 		}
 		
