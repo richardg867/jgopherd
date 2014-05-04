@@ -23,7 +23,7 @@ public class Configuration extends Properties {
 	@Property
 	public boolean executeSupported = Main.executeSupported;
 	@Property
-	public String moleRegex = "\\.mol$";
+	public String moleRegex = ".+\\.mol$";
 	@Property
 	public boolean exposeStats = true;
 	@Property
