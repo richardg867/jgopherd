@@ -22,6 +22,7 @@ public class JarMole extends Mole {
 	}
 	
 	@Override
+	@SuppressWarnings("rawtypes")
 	public List<GopherEntry> handleRequest(GopherRequest request) throws Throwable {		
 		JarFile jar = new JarFile(request.file);
 		ClassLoader loader = URLClassLoader.newInstance(new URL[] {request.file.toURI().toURL()});
@@ -43,6 +44,7 @@ public class JarMole extends Mole {
 			}
 		}
 		
+		jar.close();		
 		return null;
 	}
 }

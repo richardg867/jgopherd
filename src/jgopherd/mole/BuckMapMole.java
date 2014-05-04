@@ -57,6 +57,7 @@ public class BuckMapMole extends Mole {
 			result.add(new GopherEntry(type, title, path, server, port));
 		}
 		
+		reader.close();
 		return result;
 	}
 }
