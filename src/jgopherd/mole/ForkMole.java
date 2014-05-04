@@ -42,6 +42,7 @@ public class ForkMole extends Mole {
 		env.put("SERVER_PORT", "" + Main.config.port);
 		env.put("SELECTOR", request.path + (request.params.isEmpty() ? "" : "?" + request.params));
 		env.put("REQUEST", request.path);
+		env.put("PARAMS", request.params);
 		
 		Process process = builder.start();
 		
